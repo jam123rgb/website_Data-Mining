@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+  <siteMapNode url="Default.aspx" title="Home"  description="Home page for MySite">
+    <siteMapNode url="Customers.aspx" title="Customers" description="Customers List" />
+    <siteMapNode url="CCD.aspx" title="CCD"  description="Customers Business Data" />
+    <siteMapNode url="rfm.aspx" title="RFM" description="Customers Advantage" />
+    <siteMapNode url="Clustering.aspx" title="data clustering" description="Cluster Page for MySite" />
+    <siteMapNode url="Color.aspx" title="Customers Color" description="Golden And Silver And Bronze" />
+    <siteMapNode url="SQL Server 2005 Data Mining tutorial.aspx" title="Data Mining tutorial" description="SQL Server 2005 Data Mining tutorial" />
+    <siteMapNode title="About" description="About the site" url="about.aspx" />
+  <siteMapNode url="Login.aspx" title="Login"  description="Login"/>
+  </siteMapNode>
+</siteMap>

@@ -1,0 +1,203 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="site.master.cs" Inherits="site" %>
+
+<script runat="server">
+    
+  private bool realMode;
+
+  void Page_Load(object sender, System.EventArgs e)
+  {
+    if (SiteMap.CurrentNode == null)
+    {
+      ViewSourceButton.HRef = "SourceViewer/SrcView.aspx?file=" + new System.IO.FileInfo(Request.PhysicalPath).Name;
+    }
+    else
+    {
+      PageTitle.Text = SiteMap.CurrentNode.Title;
+      ViewSourceButton.HRef = "SourceViewer/SrcView.aspx?file=" + SiteMap.CurrentNode.Url;
+    }
+
+    // hide the code download / source view section if running in real mode
+    realMode = (ConfigurationManager.AppSettings["mode"] == "Real");
+    if (realMode)
+    {
+      code.Visible = false;
+      
+    }
+
+  }
+
+  // Databinding for individual menu items is done to remove certain items from the menu
+  // This allows us to have the items in the sitemap and for them to partake in the 
+  // siteMapPath control, but not to appear in the menu. 
+  protected void MyMenu_MenuItemDataBound(object sender, System.Web.UI.WebControls.MenuEventArgs e)
+  {
+    string text = e.Item.Text;
+
+    if (text == "Checkout" || text == "Shop Item" || text == "Shopping Cart")
+      e.Item.Parent.ChildItems.Remove(e.Item);
+  }
+    
+
+</script>
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head id="PageHead" runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Language" content="en-uk" />
+
+    <title>Data Mining Home Page</title>
+    <link id="Link1" rel="stylesheet" type="text/css" href="site.css" runat="server" />
+    <link id="Link2" rel="Alternate" type="text/css" href="siteHighContrast.css" runat="server" />
+</head>
+<body bgcolor ="black"> 
+    <form id="mainForm" runat="server">
+    <div>
+           
+        <div id="header">
+            <div id="logo">
+                <img src="Images/world.bmp" /></div>
+            <h1>Data Mining<img src="Images/Data%20Mining.bmp" /></h1>
+
+            <div id="code" class="code" runat="server">
+                <a href="DataMining.zip" title="Download the code for this site">Download Code</a><br />
+                <a id="ViewSourceButton" runat="server" target="_blank"
+                    title="View page source in a new window">View Page Source</a>
+            </div>
+        </div>
+        
+        
+        <div id="sidebar">
+            <h3>Navigation</h3>
+            <asp:sitemapdatasource id="siteData" runat="server" />
+            <div id="nav">
+                <asp:menu id="MyMenu" runat="server" datasourceid="siteData"
+                    orientation="Vertical"
+                    staticdisplaylevels="2" StaticSubMenuIndent="0"
+                    disappearafter="200"
+                    AccessKey="m"
+                    OnMenuItemDataBound="MyMenu_MenuItemDataBound"
+                    EnableViewState="false"
+                    >
+                    <DynamicMenuStyle CssClass="dynamicMenu" />
+                    <DynamicMenuItemStyle CssClass="dynamicMenuItem" />
+               </asp:menu>
+            </div>
+
+            <div>
+                &nbsp;<br clear="all" />
+                &nbsp;</div>
+        </div>
+        
+        
+        <div id="content">
+
+            <h2><asp:Label ID="PageTitle" runat="server" /></h2>
+            
+            <div class="itemContent">
+                <asp:contentplaceholder id="mainContent" runat="server" >
+                    <table bgcolor="white" border="1" bordercolor="black" cellpadding="5" cellspacing="0"
+                        height="400" width="600">
+                        <tbody>
+                            <tr>
+                                <td valign="top" width="150">
+                                    <!-- Menu Column -->
+                                    <asp:Menu ID="Menu1" runat="server">
+                                        <Items>
+                                            <asp:MenuItem NavigateUrl="~/Default.aspx" Text="Home"></asp:MenuItem>
+                                            <asp:MenuItem Text="Members">
+                                                <asp:MenuItem NavigateUrl="Members/ViewAuthors.aspx" Text="View Authors"></asp:MenuItem>
+                                                <asp:MenuItem NavigateUrl="Members/ViewTitles.aspx" Text="View Titles"></asp:MenuItem>
+                                            </asp:MenuItem>
+                                            <asp:MenuItem Text="Admin">
+                                                <asp:MenuItem NavigateUrl="Admin/ViewUsers.aspx" Text="View Users"></asp:MenuItem>
+                                            </asp:MenuItem>
+                                        </Items>
+                                    </asp:Menu>
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <asp:LoginView ID="LoginView1" runat="server">
+                                        <LoggedInTemplate>
+                                            <asp:Menu ID="Menu3" runat="server">
+                                                <Items>
+                                                    <asp:MenuItem NavigateUrl="~/ChangePassword.aspx" Text="Change Password"></asp:MenuItem>
+                                                </Items>
+                                            </asp:Menu>
+                                        </LoggedInTemplate>
+                                        <AnonymousTemplate>
+                                            <asp:Menu ID="Menu2" runat="server">
+                                                <Items>
+                                                    <asp:MenuItem NavigateUrl="~/CreateNewUser.aspx" Text="Create Account"></asp:MenuItem>
+                                                </Items>
+                                            </asp:Menu>
+                                        </AnonymousTemplate>
+                                    </asp:LoginView>
+                                </td>
+                                <td valign="top">
+                                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td width="85%">
+                                                    <asp:Label ID="Label1" runat="server" Font-Bold="true" Font-Size="24px" Text="My Data Mining Web site"> 
+                                                    </asp:Label>
+                                                </td>
+                                                <td width="15%">
+                                                    <!-- Login Status Area -->
+                                                    <asp:LoginStatus ID="LoginStatus1" runat="server" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <hr color="black" size="2" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    User:
+                                                    <asp:LoginView ID="LoginView2" runat="server">
+                                                        <AnonymousTemplate>
+                                                            Guest, Please log in
+                                                        </AnonymousTemplate>
+                                                        <LoggedInTemplate>
+                                                            <asp:LoginName ID="LoginName1" runat="server" />
+                                                        </LoggedInTemplate>
+                                                    </asp:LoginView>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <hr color="black" size="2" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" height="100%" valign="top">
+                                                    <asp:ContentPlaceHolder ID="cphMain" runat="server">
+                                                    </asp:ContentPlaceHolder>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </asp:contentplaceholder>
+            </div>
+            
+            <div id="breadcrumbs">
+                <asp:sitemappath style="float:left" id="crumbs" runat="server"  />
+            </div>
+        </div>
+
+  
+        <div id="footer">
+	        <p class="left">All content copyright &copy; Jamal Design Press and its subsidiaries 2008.</p>
+	        <p class="right">Website designed by <a href="http://www.JamalDesign.co.uk/" title="croak">jamal bakhtiary</a></p>
+        </div>
+    </div>
+    </form>
+</body>
+</html>
